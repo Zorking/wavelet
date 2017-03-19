@@ -42,7 +42,7 @@ def get_data(file_name):
 
 
 def wavelet_transformation(sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3, data_size):
-    approximation, detail_coefficients = pywt.dwt(sig_3_3, 'db1')
+    approximation, detail_coefficients = pywt.dwt(sig_3_3, 'sym7')
     approximation, detail_coefficients = approximation[:data_size], detail_coefficients[:data_size]
     time = np.arange(0, data_size*10, 10)
     return approximation, detail_coefficients, time

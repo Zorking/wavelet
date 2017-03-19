@@ -18,3 +18,4 @@ plt.imshow(zi, vmin=z.min(), vmax=z.max(), origin='lower',
 plt.scatter(x, y, c=z)
 plt.colorbar()
 plt.show()
+# plt.savefig('name.png')
