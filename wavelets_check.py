@@ -1,6 +1,5 @@
 import pywt
 
 qwer = pywt.wavelist(family='morl')
-print qwer
+print(qwer)
 wavelet = pywt.ContinuousWavelet('mexh')
-

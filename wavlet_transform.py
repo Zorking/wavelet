@@ -12,11 +12,11 @@ def main():
     # data_size = int(raw_input('Input data size:\n'))
     # csv_file_name = str(raw_input('Please input csv file name:\n'))
     file_name = 'signal.dtu'
-    data_size = 100
+    # data_size = 100
     csv_file_name = 'qwerty.csv'
-    sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3 = get_data(file_name)
-    approximation, detail_coefficients, time = wavelet_transformation(sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3, data_size)
-    write_csv(sig_3_3, approximation, detail_coefficients, time, csv_file_name)
+    time, sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3 = get_data(file_name)
+    approximation, detail_coefficients= wavelet_transformation(sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3)
+    # write_csv(sig_3_3, approximation, detail_coefficients, time, csv_file_name)
     draw_plot(approximation, detail_coefficients, time)
 
 def get_data(file_name):
@@ -38,21 +38,22 @@ def get_data(file_name):
                 sig_2_2.append(arr[4])
                 sig_3_1.append(arr[5])
                 sig_3_3.append(arr[6])
-    return sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3
+    return time, sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3
 
 
-def wavelet_transformation(sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3, data_size):
+def wavelet_transformation(sig_1_1, sig_1_3, sig_2_1, sig_2_2, sig_3_1, sig_3_3):
     approximation, detail_coefficients = pywt.dwt(sig_3_3, 'sym7')
-    approximation, detail_coefficients = approximation[:data_size], detail_coefficients[:data_size]
-    time = np.arange(0, data_size*10, 10)
-    return approximation, detail_coefficients, time
+    # approximation, detail_coefficients = approximation[:data_size], detail_coefficients
+    # time = np.arange(0, len(approximation), 10)
+    return approximation, detail_coefficients
 
 
 def draw_plot(approximation, detail_coefficients, time):
-    xi, yi = np.linspace(approximation.min(), approximation.max(), 100), np.linspace(time.min(), time.max(), 100)
+    time = np.array(time)
+    xi, yi = np.linspace(approximation.min(), approximation.max(), approximation.size), np.linspace(time.min(), time.max(), approximation.size)
     xi, yi = np.meshgrid(xi, yi)
 
-    rbf = scipy.interpolate.Rbf(approximation, time, detail_coefficients, function='linear')
+    rbf = scipy.interpolate.Rbf(approximation, time[:approximation.size], detail_coefficients, function='linear')
     zi = rbf(xi, yi)
 
     plt.imshow(zi, vmin=detail_coefficients.min(), vmax=detail_coefficients.max(), origin='lower',

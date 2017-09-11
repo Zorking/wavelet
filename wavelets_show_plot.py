@@ -8,7 +8,7 @@ Coiflets (coif)
 Reverse biorthogonal (rbio)
 '''
 
-[phi, psi, x] = pywt.Wavelet('db1').wavefun(level=4)
+[psi, x] = pywt.ContinuousWavelet('morl').wavefun(level=6)
 
 pylab.plot(x, psi)
 pylab.show()
